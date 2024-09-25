@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - VITE_API_URL=localhost:3000
+    volumes:
+      - ./backend/graph/schema.graphqls:/backend/graph/schema.graphqls
+      - ./frontend:/frontend
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: /app
+    depends_on:
+      - cleanup
+
+  cleanup:
+    image: docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: docker rm -f codel-browser || true
