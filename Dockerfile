@@ -32,13 +32,11 @@ RUN go build -ldflags='-extldflags "-static"' -o /app
 # STEP 3: Build the final image
 FROM alpine:3.14
 
-# Install Docker CLI
-RUN apk add --no-cache docker
-
 COPY --from=be-build /app /app
 COPY --from=fe-build /frontend/dist /fe
 
 # Install sqlite3
+
 RUN apk add --no-cache sqlite
 
 CMD /app
